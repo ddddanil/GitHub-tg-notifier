@@ -14,12 +14,13 @@ async def register(config: ConfigParser, message: types.Message):
     chat = str(message.chat.id)
     name = message.get_args()
     id = make_id(user, name, config["DEFAULT"]["SALT"])
-    await DataBaseHandler.insert_hook(Hook(id, user, name, chat))
-    return SendMessage(message.chat.id, f"Ok, add this url to your webhooks {config['web']['host'] + 'hook/' + id}")
+    db = DataBaseHandler(config)
+    await db.insert_hook(Hook(id, user, name, chat))
+    return SendMessage(message.chat.id, f"Ok, add this url to your webhooks {config['WEB']['HOST'] + 'hook/' + id}")
 
 
 def bot(config: ConfigParser) -> Dispatcher:
-    bot = Bot(config['Telegram']['Token'])
+    bot = Bot(config['TELEGRAM']['TOKEN'])
     dispatcher = Dispatcher(bot)
 
     dispatcher.register_message_handler(partial(register, config), commands=["register"])

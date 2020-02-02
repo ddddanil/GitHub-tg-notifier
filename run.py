@@ -3,9 +3,11 @@ from functools import partial
 from aiohttp.web import run_app
 from asyncio import ensure_future
 from aiogram.utils.executor import start_polling
+from asyncio import get_event_loop
 import logging
 from tg import bot
 from web import server
+from db import DataBaseHandler
 logger = logging.getLogger("GitHubBot.main")
 
 
@@ -43,9 +45,12 @@ async def stop_bot(app):
     pass
 
 
-def main():
+async def build():
     prepare_logging()
     config = get_config()
+
+    db = DataBaseHandler(config)
+    await db.create_table()
 
     web_server = server()
 
@@ -56,10 +61,10 @@ def main():
 
 
 if __name__ == '__main__':
-    web_server = main()
+    web_server = get_event_loop().run_until_complete(build())
     run_app(web_server)
 
 
 def init_func(argv):
-    web_server = main()
+    web_server = get_event_loop().run_until_complete(build())
     return web_server

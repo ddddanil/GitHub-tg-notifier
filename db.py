@@ -1,5 +1,6 @@
 import aiosqlite
 from collections import namedtuple
+from configparser import ConfigParser
 from random import randint
 from hashlib import sha256
 
@@ -19,8 +20,19 @@ class Singleton(type):
 class DataBaseHandler(metaclass=Singleton):
     __slots__ = ["db", "queue"]
 
-    def __init__(self, connect: str):
-        self.db = connect
+    def __init__(self, config: ConfigParser):
+        self.db = config['DATABASE']['PATH']
+
+    async def create_table(self):
+        async with aiosqlite.connect(self.db) as db:
+            await db.execute("""
+                CREATE TABLE IF NOT EXISTS hooks (
+                 id text,
+                 user text,
+                 name text,
+                 chat text
+            """)
+            await db.commit()
 
     async def get_for_user(self, user: str):
         async with aiosqlite.connect(self.db) as db:
