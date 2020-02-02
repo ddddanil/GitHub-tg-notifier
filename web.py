@@ -1,6 +1,7 @@
 from aiohttp import web
 import aiogram
 from db import Hook, DataBaseHandler
+from tg_executor import HookExecutor
 
 
 async def handle_hook(request: web.Request) -> web.Response:
@@ -13,7 +14,20 @@ async def handle_hook(request: web.Request) -> web.Response:
     return web.Response()
 
 
-def server():
+def github_hooks() -> web.Application:
     app = web.Application()
-    app.router.add_post("/hook/{id:[a-fA-F0-9]{64}}", handle_hook)
+    app.router.add_post("/{id:[a-fA-F0-9]{64}}", handle_hook)
+    return app
+
+
+def telegram_hooks(dispatcher: aiogram.Dispatcher) -> web.Application:
+    executor = HookExecutor(dispatcher)
+    executor._setup()
+    return executor.web_app()
+
+
+def server(tg: aiogram.Dispatcher) -> web.Application:
+    app = web.Application()
+    app.add_subapp("github/", github_hooks())
+    app.add_subapp("tg/", telegram_hooks(tg))
     return app

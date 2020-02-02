@@ -33,18 +33,6 @@ def get_config() -> ConfigParser:
     return config
 
 
-async def start_bot(config, app):
-    telegram = bot(config)
-    app['telegram-bot'] = telegram
-    start_polling(telegram, skip_updates=True)
-    pass
-
-
-async def stop_bot(app):
-    # app['telegram-bot'].stop()
-    pass
-
-
 async def build():
     prepare_logging()
     config = get_config()
@@ -52,10 +40,10 @@ async def build():
     db = DataBaseHandler(config)
     await db.create_table()
 
-    web_server = server()
 
-    web_server.on_startup.append(partial(start_bot, config))
-    web_server.on_shutdown.append(stop_bot)
+    telegram = bot(config)
+    web_server = server(telegram)
+    web_server['telegram-bot'] = telegram
 
     return web_server
 
