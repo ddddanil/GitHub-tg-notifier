@@ -17,6 +17,12 @@ class HookExecutor:
         self._web_app = None
         self._frozen = False
 
+        from aiogram import Bot, Dispatcher
+        Bot.set_current(dispatcher.bot)
+        Dispatcher.set_current(dispatcher)
+
+        self._setup()
+
     @property
     def _assert_not_frozen(self):
         if self._frozen:
@@ -36,7 +42,7 @@ class HookExecutor:
 
         self._web_app['RETRY_AFTER'] = self.retry_after | None
 
-        self._web_app.router.add_route('*', webhook_path, handler)
+        self._web_app.router.add_route('*', webhook_path, handler, name="tg_webhook_handler")
 
         async def _wrap_callback(cb, _):
             return await cb(self.dispatcher)

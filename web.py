@@ -22,7 +22,6 @@ def github_hooks() -> web.Application:
 
 def telegram_hooks(dispatcher: aiogram.Dispatcher) -> web.Application:
     executor = HookExecutor(dispatcher)
-    executor._setup()
     return executor.web_app()
 
 
