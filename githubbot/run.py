@@ -28,7 +28,7 @@ def prepare_logging():
 
 def get_config() -> ConfigParser:
     config = ConfigParser()
-    config.read("config.ini")
+    config.read("config.ini.example")
     return config
 
 
