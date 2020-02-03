@@ -4,9 +4,9 @@ from aiohttp.web import run_app
 from asyncio import ensure_future
 from asyncio import get_event_loop
 import logging
-from tg import bot
-from web import server
-from db import DataBaseHandler
+from .tg import bot
+from .web import server
+from .db import DataBaseHandler
 logger = logging.getLogger("GitHubBot.main")
 
 

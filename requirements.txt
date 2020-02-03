@@ -3,3 +3,5 @@ aiosqlite
 aiogram
 configparser
 janus
+pytest
+pytest-asyncio

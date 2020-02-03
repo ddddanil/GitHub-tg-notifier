@@ -1,7 +1,9 @@
 from aiohttp import web
 import aiogram
-from db import Hook, DataBaseHandler
-from tg_executor import HookExecutor
+from .db import Hook, DataBaseHandler
+from .tg_executor import HookExecutor
+from logging import getLogger
+logger = getLogger("GitHubBot.web")
 
 
 async def handle_hook(request: web.Request) -> web.Response:

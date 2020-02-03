@@ -2,9 +2,9 @@ from aiogram import Dispatcher
 from aiogram.dispatcher.webhook import WebhookRequestHandler
 from aiohttp import web
 from functools import partial
-from singleton import Singleton
+from .singleton import Singleton
 from logging import getLogger
-logger = getLogger('GitHubBot.telegram')
+logger = getLogger('GitHubBot.telegram.Executor')
 
 
 class HookExecutor(metaclass=Singleton):

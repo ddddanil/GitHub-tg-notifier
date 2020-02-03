@@ -4,7 +4,7 @@ from aiogram import Bot
 from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.webhook import *
 from logging import getLogger
-from db import Hook, make_id, DataBaseHandler
+from .db import Hook, make_id, DataBaseHandler
 logger = getLogger('GitHubBot.telegram')
 
 

@@ -3,7 +3,9 @@ from collections import namedtuple
 from configparser import ConfigParser
 from random import randint
 from hashlib import sha256
-from singleton import Singleton
+from .singleton import Singleton
+from logging import getLogger
+logger = getLogger("GitHubBot.DataBase")
 
 
 Hook = namedtuple('Hook', 'id user name chat')
