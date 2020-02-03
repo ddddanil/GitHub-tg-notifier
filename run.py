@@ -2,7 +2,6 @@ from configparser import ConfigParser
 from functools import partial
 from aiohttp.web import run_app
 from asyncio import ensure_future
-from aiogram.utils.executor import start_polling
 from asyncio import get_event_loop
 import logging
 from tg import bot
