@@ -21,10 +21,11 @@ class DataBaseHandler(metaclass=Singleton):
         async with aiosqlite.connect(self.db) as db:
             await db.execute("""
                 CREATE TABLE IF NOT EXISTS hooks (
-                 id text,
-                 user text,
-                 name text,
-                 chat text
+                  id text,
+                  user text,
+                  name text,
+                  chat text
+                )
             """)
             await db.commit()
 
