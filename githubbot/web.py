@@ -10,7 +10,7 @@ async def handle_hook(request: web.Request) -> web.Response:
     id = request.match_info['id']
     telegram: aiogram.Dispatcher = request.app['telegram-bot']
     db = DataBaseHandler()
-    hook: Hook = db.get_by_id(id)
+    hook: Hook = await db.get_by_id(id)
     await telegram.bot.send_message(hook.chat, "New push")
 
     return web.Response()
