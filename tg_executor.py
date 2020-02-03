@@ -2,10 +2,12 @@ from aiogram import Dispatcher
 from aiogram.dispatcher.webhook import WebhookRequestHandler
 from aiohttp import web
 from functools import partial
+from singleton import Singleton
 from logging import getLogger
 logger = getLogger('GitHubBot.telegram')
 
-class HookExecutor:
+
+class HookExecutor(metaclass=Singleton):
     def __init__(self, dispatcher, **kwargs):
         self.dispatcher = dispatcher
         self.skip_updates = kwargs['skip_updates']
