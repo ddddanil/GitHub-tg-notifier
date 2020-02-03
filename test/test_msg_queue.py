@@ -6,15 +6,25 @@ from githubbot.msg_queue import MsgQueue
 
 class TestMsgQueue:
 
-    @pytest.mark.asyncio
-    async def test_queue(self):
-
+    @pytest.fixture
+    def messages(self):
         class Message(Enum):
             Huh = auto()
             Yes = auto()
             No = auto()
 
-        queue = MsgQueue(Message)
+        return Message
+
+    @pytest.yield_fixture
+    def message_queue(self, messages):
+        queue = MsgQueue(messages)
+
+        queue_fut = asyncio.ensure_future(queue.dispatch())
+        yield queue
+        queue_fut.cancel()
+
+    @pytest.mark.asyncio
+    async def test_queue(self, message_queue, messages):
 
         async def huhhuh(huh: str):
             assert huh == "huh"
@@ -25,15 +35,11 @@ class TestMsgQueue:
         async def no(thing: bool):
             assert not thing
 
-        queue.register_handler(Message.Huh, huhhuh)
-        queue.register_handler(Message.Yes, yes)
-        queue.register_handler(Message.No, no)
+        message_queue.register_handler(messages.Huh, huhhuh)
+        message_queue.register_handler(messages.Yes, yes)
+        message_queue.register_handler(messages.No, no)
 
-        queue_fut = asyncio.ensure_future(queue.dispatch())
-
-        await queue.push(Message.Huh, "huh")
-        await queue.push(Message.Yes, True)
-        await queue.push(Message.No, None)
-        await queue.push(Message.Yes, False)
-
-        queue_fut.cancel()
+        await message_queue.push(messages.Huh, "huh")
+        await message_queue.push(messages.Yes, True)
+        await message_queue.push(messages.No, None)
+        await message_queue.push(messages.Yes, False)
