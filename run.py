@@ -1,12 +1,10 @@
 from configparser import ConfigParser
-from functools import partial
 from aiohttp.web import run_app
-from asyncio import ensure_future
 from asyncio import get_event_loop
 import logging
-from .tg import bot
-from .web import server
-from .db import DataBaseHandler
+from githubbot.tg import bot
+from githubbot.web import server
+from githubbot.db import DataBaseHandler
 logger = logging.getLogger("GitHubBot.main")
 
 
@@ -28,7 +26,7 @@ def prepare_logging():
 
 def get_config() -> ConfigParser:
     config = ConfigParser()
-    config.read("config.ini.example")
+    config.read("config.ini")
     return config
 
 
